@@ -12,7 +12,7 @@ The full deployment package, including infrastructure files and installation ins
 ## Repository Contents
 
 This repository includes only the application source code:
-
+```bash
 /
 ├── WebFrontend/
 │   ├── static/
@@ -26,7 +26,7 @@ This repository includes only the application source code:
     ├── createGuardian/
     ├── aisilentguard-api/
     └── getGuardians/
-
+```
 The repository does not include the full AWS infrastructure package.
 
 ## Full Installation and Deployment Package
