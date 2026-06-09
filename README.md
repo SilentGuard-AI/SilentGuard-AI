@@ -36,16 +36,16 @@ The complete installation package is available in the following Google Drive fol
 Google Drive Installation Folder:
 [https://drive.google.com/drive/folders/1Vglkw6AxOfiEPWT9KIa7b8RF9-lAdHVy]
 
-The Google Drive folder contains:
+### The Google Drive folder contains:
 
-CloudFormation template
-API Gateway Swagger/OpenAPI export
-Amazon Connect Contact Flow exports
-Deployment scripts
-Cleanup scripts
-Environment example file
-Full installation guide
-Architecture documentation
-Feature/use-case documentation
+* CloudFormation template
+* API Gateway Swagger/OpenAPI export
+* Amazon Connect Contact Flow exports
+* Deployment scripts
+* Cleanup scripts
+* Environment example file
+* Full installation guide
+* Architecture documentation
+* Feature/use-case documentation
 
 The technical installation process should be followed from the files and instructions inside the Google Drive folder.
