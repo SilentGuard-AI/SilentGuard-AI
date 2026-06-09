@@ -23,9 +23,7 @@ This repository includes only the application source code:
 └── lambdas/
     ├── aisilentguard-api/
     ├── aisilentguard-getMe/
-    ├── createGuardian/
-    ├── aisilentguard-api/
-    └── getGuardians/
+    └── aisilentguard-api/
 ```
 The repository does not include the full AWS infrastructure package.
 
