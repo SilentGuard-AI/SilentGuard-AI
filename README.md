@@ -1,49 +1,47 @@
-# SilentGuard AI - Source Code Repository
+# SilentGuard AI – Source Code Repository
 
-SilentGuard AI is an AWS-based system designed to help detect suspicious scam calls and notify guardians when a potential risk is identified.
+SilentGuard AI is an AWS-based system that detects suspicious scam calls in real time and notifies guardians when a potential risk is identified.
 
-This repository contains the main source code of the project, including:
+This repository contains the **application source code** only:
+- Frontend (React, served via CloudFront)
+- AWS Lambda functions
 
-Frontend source code
-AWS Lambda source code
+The full deployment package — infrastructure templates and installation instructions — is available in the Google Drive folder linked below.
 
-The full deployment package, including infrastructure files and installation instructions, is available in the Google Drive folder linked below.
+## Tech Stack
+Amazon Connect + Contact Lens, EventBridge, Lambda (Node.js), DynamoDB, SNS/SES, API Gateway, Cognito, React + CloudFront.
 
 ## Repository Contents
-
-This repository includes only the application source code:
 ```bash
 /
 ├── WebFrontend/
 │   ├── static/
-|        └── js/
+│   │   └── js/
 │   ├── asset-manifest.json
 │   └── index.html
 │
 └── lambdas/
     ├── aisilentguard-api/
     ├── aisilentguard-getMe/
-    └── aisilentguard-api/
+    └── aisilentguard-analyzeScam
 ```
-The repository does not include the full AWS infrastructure package.
 
-## Full Installation and Deployment Package
+This repository does **not** include the AWS infrastructure package.
 
-The complete installation package is available in the following Google Drive folder:
+## Full Installation & Deployment Package
+The complete installation package is available here:
 
-Google Drive Installation Folder:
-[https://drive.google.com/drive/folders/1Vglkw6AxOfiEPWT9KIa7b8RF9-lAdHVy]
+📂 [Google Drive Installation Folder](https://drive.google.com/drive/folders/1Vglkw6AxOfiEPWT9KIa7b8RF9-lAdHVy)
 
-### The Google Drive folder contains:
+The folder contains:
+- CloudFormation template
+- API Gateway Swagger/OpenAPI export
+- Amazon Connect contact flow exports
+- Deployment scripts
+- Cleanup scripts
+- Environment example file (`.env.example`)
+- Full installation guide
+- Architecture documentation
+- Feature / use-case documentation
 
-* CloudFormation template
-* API Gateway Swagger/OpenAPI export
-* Amazon Connect Contact Flow exports
-* Deployment scripts
-* Cleanup scripts
-* Environment example file
-* Full installation guide
-* Architecture documentation
-* Feature/use-case documentation
-
-The technical installation process should be followed from the files and instructions inside the Google Drive folder.
+> Follow the installation steps from the instructions inside the Google Drive folder.
