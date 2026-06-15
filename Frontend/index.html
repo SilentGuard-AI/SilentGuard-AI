@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SilentGuard AI</title>
+  <meta name="description" content="Real-time AI protection from phone scams"/>
+  <script defer="defer" src="/static/js/main.13b5d002.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/javascript">
+
+(function () {
+  var demoMarkup =
+    '<section id="sg-pipeline-demo" aria-label="SilentGuard pipeline demo">' +
+      '<div class="sg-demo-shell">' +
+        '<div class="sg-demo-header">' +
+          '<div class="sg-demo-eyebrow">Interactive pipeline preview</div>' +
+          '<h2>From suspicious call to automatic protection</h2>' +
+          '<p>Watch how SilentGuard analyzes a risky phone call, identifies scam signals, saves the event, alerts a guardian, and automatically hangs up the call when the risk becomes critical.</p>' +
+        '</div>' +
+        '<div class="sg-demo-stage">' +
+          '<div class="sg-phone-card">' +
+            '<div class="sg-phone-top"><span>SilentGuard protected line</span><span class="sg-phone-pill" id="sg-call-state">Call active</span></div>' +
+            '<div class="sg-caller">' +
+              '<div class="sg-avatar">SG</div>' +
+              '<h3>Incoming unknown caller</h3>' +
+              '<p>Real-time call analysis running</p>' +
+              '<div class="sg-wave" aria-hidden="true">' +
+                '<span style="--h:18px;--d:0s"></span><span style="--h:34px;--d:.1s"></span><span style="--h:46px;--d:.2s"></span><span style="--h:28px;--d:.3s"></span><span style="--h:40px;--d:.4s"></span><span style="--h:22px;--d:.5s"></span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="sg-transcript">' +
+              '<div class="sg-bubble" data-sg-line="0"><strong>Caller</strong>“This is your bank. Your account is locked.”</div>' +
+              '<div class="sg-bubble sg-warning" data-sg-line="1"><strong>Caller</strong>“Tell me the verification code now. This is urgent.”</div>' +
+              '<div class="sg-bubble sg-alert" data-sg-line="2"><strong>SilentGuard</strong>High scam risk detected. Guardian alert created.</div>' +
+              '<div class="sg-bubble sg-hangup" data-sg-line="3"><strong>Action</strong>Call automatically disconnected to protect the user.</div>' +
+            '</div>' +
+            '<div class="sg-demo-actions">' +
+              '<button type="button" class="sg-demo-btn" id="sg-run-demo">Run protection demo</button>' +
+              '<span class="sg-demo-subtle">Simulated call flow</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="sg-board">' +
+            '<div class="sg-board-top">' +
+              '<div class="sg-risk-ring" id="sg-risk-ring" style="--sg-score:8%"><span id="sg-risk-value">08</span></div>' +
+              '<div class="sg-risk-copy"><h3 id="sg-risk-title">Monitoring call</h3><p id="sg-risk-copy">SilentGuard is waiting for scam indicators in the live transcript.</p></div>' +
+              '<div class="sg-risk-badge" id="sg-risk-badge">Low risk</div>' +
+            '</div>' +
+            '<div class="sg-pipeline-list">' +
+              '<div class="sg-stage-row" data-sg-step="0"><div class="sg-stage-icon">01</div><div class="sg-stage-main"><h4>Protected call received</h4><p>The call enters the SilentGuard phone flow.</p></div><span class="sg-service-tag">Amazon Connect</span></div>' +
+              '<div class="sg-stage-row" data-sg-step="1"><div class="sg-stage-icon">02</div><div class="sg-stage-main"><h4>Live transcript generated</h4><p>Speech is converted into text segments during the call.</p></div><span class="sg-service-tag">Contact Lens</span></div>' +
+              '<div class="sg-stage-row" data-sg-step="2"><div class="sg-stage-icon">03</div><div class="sg-stage-main"><h4>Scam language detected</h4><p>Urgency, bank-account pressure, and verification-code requests raise the score.</p></div><span class="sg-service-tag">EventBridge</span></div>' +
+              '<div class="sg-stage-row" data-sg-step="3"><div class="sg-stage-icon">04</div><div class="sg-stage-main"><h4>Risk analyzer triggered</h4><p>The Lambda function calculates risk level, signals, and recommended response.</p></div><span class="sg-service-tag">Lambda</span></div>' +
+              '<div class="sg-stage-row" data-sg-step="4"><div class="sg-stage-icon">05</div><div class="sg-stage-main"><h4>Event stored for review</h4><p>The transcript, score, detected topics, and action are saved to the dashboard.</p></div><span class="sg-service-tag">DynamoDB</span></div>' +
+              '<div class="sg-stage-row sg-critical" data-sg-step="5"><div class="sg-stage-icon">06</div><div class="sg-stage-main"><h4>Guardian alerted + call hung up</h4><p>A guardian alert is sent and the dangerous call is automatically disconnected.</p></div><span class="sg-service-tag">SNS + Connect</span></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</section>';
+
+  function installStyles() {
+    if (document.getElementById("sg-pipeline-demo-style")) return;
+    var style = document.createElement("style");
+    style.id = "sg-pipeline-demo-style";
+    style.textContent = "\n/* SilentGuard premium static landing-page demo. */\n#sg-pipeline-demo {\n  position: relative;\n  padding: 88px 32px;\n  overflow: hidden;\n  background:\n    radial-gradient(circle at 20% 10%, rgba(56,189,248,.18), transparent 30%),\n    radial-gradient(circle at 80% 5%, rgba(37,99,235,.18), transparent 28%),\n    linear-gradient(135deg, rgba(10,30,52,.98), rgba(15,23,42,.98));\n  border-top: 1px solid rgba(255,255,255,.08);\n  border-bottom: 1px solid rgba(255,255,255,.08);\n}\n#sg-pipeline-demo::before {\n  content: \"\";\n  position: absolute;\n  inset: -180px auto auto 50%;\n  width: 760px;\n  height: 760px;\n  border-radius: 999px;\n  transform: translateX(-50%);\n  background: radial-gradient(circle, rgba(37,99,235,.15), transparent 65%);\n  pointer-events: none;\n}\n.sg-demo-shell {\n  position: relative;\n  max-width: 1180px;\n  margin: 0 auto;\n}\n.sg-demo-header {\n  max-width: 780px;\n  margin-bottom: 30px;\n}\n.sg-demo-eyebrow {\n  display: inline-flex;\n  align-items: center;\n  gap: 9px;\n  padding: 8px 12px;\n  border-radius: 999px;\n  color: #BDEBFF;\n  background: rgba(56,189,248,.10);\n  border: 1px solid rgba(56,189,248,.20);\n  font-size: 12px;\n  font-weight: 900;\n  letter-spacing: .08em;\n  text-transform: uppercase;\n}\n.sg-demo-eyebrow::before {\n  content: \"\";\n  width: 8px;\n  height: 8px;\n  border-radius: 999px;\n  background: #22C55E;\n  box-shadow: 0 0 0 7px rgba(34,197,94,.12);\n}\n.sg-demo-header h2 {\n  margin: 18px 0 12px;\n  color: #fff;\n  font-family: var(--font-head, Inter, system-ui, sans-serif);\n  font-size: clamp(34px, 5vw, 56px);\n  line-height: .98;\n  letter-spacing: -.06em;\n  font-weight: 900;\n}\n.sg-demo-header p {\n  margin: 0;\n  color: rgba(226,232,240,.72);\n  font-size: 17px;\n  line-height: 1.7;\n}\n.sg-demo-stage {\n  display: grid;\n  grid-template-columns: minmax(300px, .82fr) minmax(420px, 1.18fr);\n  gap: 22px;\n  align-items: stretch;\n}\n.sg-phone-card {\n  position: relative;\n  min-height: 620px;\n  border-radius: 34px;\n  padding: 22px;\n  background:\n    linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06)),\n    rgba(2,6,23,.46);\n  border: 1px solid rgba(255,255,255,.16);\n  box-shadow: 0 34px 90px rgba(0,0,0,.36);\n  overflow: hidden;\n}\n.sg-phone-card::after {\n  content: \"\";\n  position: absolute;\n  inset: auto -80px -90px auto;\n  width: 260px;\n  height: 260px;\n  background: rgba(220,38,38,.20);\n  filter: blur(48px);\n  border-radius: 999px;\n}\n.sg-phone-top {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  color: rgba(255,255,255,.72);\n  font-size: 12px;\n  font-weight: 800;\n  margin-bottom: 22px;\n}\n.sg-phone-pill {\n  display: inline-flex;\n  align-items: center;\n  gap: 7px;\n  padding: 7px 10px;\n  border-radius: 999px;\n  background: rgba(255,255,255,.08);\n  border: 1px solid rgba(255,255,255,.10);\n}\n.sg-phone-pill::before {\n  content: \"\";\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  background: #22C55E;\n}\n.sg-caller {\n  position: relative;\n  z-index: 1;\n  text-align: center;\n  padding: 20px 8px 24px;\n}\n.sg-avatar {\n  width: 82px;\n  height: 82px;\n  margin: 0 auto 14px;\n  border-radius: 28px;\n  display: grid;\n  place-items: center;\n  color: #fff;\n  font-weight: 900;\n  font-size: 26px;\n  background: linear-gradient(135deg, #2563EB, #38BDF8);\n  box-shadow: 0 24px 55px rgba(37,99,235,.34);\n}\n.sg-caller h3 {\n  color: #fff;\n  font-size: 22px;\n  margin: 0 0 5px;\n}\n.sg-caller p {\n  margin: 0;\n  color: rgba(226,232,240,.62);\n  font-size: 13px;\n}\n.sg-wave {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  gap: 5px;\n  height: 52px;\n  margin: 16px 0 8px;\n}\n.sg-wave span {\n  width: 5px;\n  border-radius: 999px;\n  background: linear-gradient(180deg, #38BDF8, #2563EB);\n  opacity: .9;\n  height: var(--h);\n  animation: sg-wave 1.1s ease-in-out infinite;\n  animation-delay: var(--d);\n}\n@keyframes sg-wave {\n  0%,100% { transform: scaleY(.55); opacity:.55; }\n  50% { transform: scaleY(1); opacity:1; }\n}\n.sg-transcript {\n  position: relative;\n  z-index: 1;\n  display: grid;\n  gap: 12px;\n  margin-top: 18px;\n}\n.sg-bubble {\n  padding: 13px 14px;\n  border-radius: 18px;\n  background: rgba(255,255,255,.09);\n  border: 1px solid rgba(255,255,255,.10);\n  color: rgba(255,255,255,.84);\n  font-size: 13px;\n  line-height: 1.5;\n  transition: transform .25s ease, border-color .25s ease, background .25s ease;\n}\n.sg-bubble strong {\n  display: block;\n  color: #BDEBFF;\n  font-size: 11px;\n  text-transform: uppercase;\n  letter-spacing: .08em;\n  margin-bottom: 5px;\n}\n.sg-bubble.sg-warning {\n  background: rgba(239,68,68,.12);\n  border-color: rgba(248,113,113,.24);\n}\n.sg-bubble.sg-alert {\n  background: rgba(34,197,94,.12);\n  border-color: rgba(34,197,94,.25);\n  color: #DCFCE7;\n  font-weight: 800;\n}\n.sg-bubble.sg-hangup {\n  background: rgba(15,23,42,.58);\n  border-color: rgba(148,163,184,.22);\n  color: #E2E8F0;\n  font-weight: 800;\n}\n.sg-bubble.sg-active {\n  transform: translateX(6px);\n  border-color: rgba(56,189,248,.45);\n  background: rgba(56,189,248,.14);\n}\n.sg-demo-actions {\n  position: relative;\n  z-index: 1;\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  flex-wrap: wrap;\n  margin-top: 22px;\n}\n.sg-demo-btn {\n  appearance: none;\n  border: 0;\n  border-radius: 999px;\n  color: #fff;\n  background: linear-gradient(135deg, #2563EB, #38BDF8);\n  padding: 13px 19px;\n  font-weight: 900;\n  cursor: pointer;\n  box-shadow: 0 18px 36px rgba(37,99,235,.32);\n}\n.sg-demo-btn:disabled {\n  opacity: .72;\n  cursor: progress;\n}\n.sg-demo-subtle {\n  color: rgba(226,232,240,.54);\n  font-size: 12px;\n}\n.sg-board {\n  border-radius: 34px;\n  padding: 22px;\n  background: rgba(248,250,252,.98);\n  border: 1px solid rgba(255,255,255,.65);\n  box-shadow: 0 34px 90px rgba(0,0,0,.32);\n  overflow: hidden;\n}\n.sg-board-top {\n  display: grid;\n  grid-template-columns: 136px 1fr auto;\n  gap: 18px;\n  align-items: center;\n  padding: 18px;\n  border-radius: 24px;\n  background:\n    radial-gradient(circle at 10% 0%, rgba(37,99,235,.12), transparent 36%),\n    #fff;\n  border: 1px solid #E2E8F0;\n  margin-bottom: 18px;\n}\n.sg-risk-ring {\n  width: 114px;\n  height: 114px;\n  border-radius: 999px;\n  display: grid;\n  place-items: center;\n  position: relative;\n  background: conic-gradient(#DC2626 var(--sg-score, 8%), #E2E8F0 0);\n}\n.sg-risk-ring::after {\n  content: \"\";\n  position: absolute;\n  width: 84px;\n  height: 84px;\n  border-radius: 999px;\n  background: #fff;\n}\n.sg-risk-ring span {\n  position: relative;\n  z-index: 1;\n  color: #DC2626;\n  font-size: 28px;\n  font-weight: 950;\n  letter-spacing: -.05em;\n}\n.sg-risk-copy h3 {\n  margin: 0 0 7px;\n  color: #0F172A;\n  font-size: 18px;\n  font-weight: 950;\n}\n.sg-risk-copy p {\n  margin: 0;\n  color: #64748B;\n  font-size: 13px;\n  line-height: 1.55;\n}\n.sg-risk-badge {\n  justify-self: end;\n  display: inline-flex;\n  align-items: center;\n  border-radius: 999px;\n  padding: 8px 11px;\n  color: #991B1B;\n  background: #FEE2E2;\n  font-size: 11px;\n  font-weight: 950;\n  text-transform: uppercase;\n  letter-spacing: .06em;\n}\n.sg-pipeline-list {\n  position: relative;\n  display: grid;\n  gap: 12px;\n}\n.sg-pipeline-list::before {\n  content: \"\";\n  position: absolute;\n  left: 27px;\n  top: 18px;\n  bottom: 18px;\n  width: 2px;\n  background: linear-gradient(180deg, rgba(37,99,235,.22), rgba(56,189,248,.22), rgba(220,38,38,.18));\n}\n.sg-stage-row {\n  position: relative;\n  display: grid;\n  grid-template-columns: 56px 1fr auto;\n  gap: 14px;\n  align-items: center;\n  border-radius: 20px;\n  padding: 14px;\n  background: #fff;\n  border: 1px solid #E2E8F0;\n  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;\n}\n.sg-stage-icon {\n  position: relative;\n  z-index: 1;\n  width: 42px;\n  height: 42px;\n  border-radius: 16px;\n  display: grid;\n  place-items: center;\n  color: #2563EB;\n  background: #EFF6FF;\n  border: 1px solid #DBEAFE;\n  font-weight: 950;\n  font-size: 13px;\n}\n.sg-stage-main h4 {\n  margin: 0 0 4px;\n  color: #0F172A;\n  font-size: 14px;\n  font-weight: 950;\n}\n.sg-stage-main p {\n  margin: 0;\n  color: #64748B;\n  font-size: 12px;\n  line-height: 1.45;\n}\n.sg-service-tag {\n  justify-self: end;\n  color: #2563EB;\n  background: #EFF6FF;\n  border: 1px solid #DBEAFE;\n  border-radius: 999px;\n  padding: 6px 9px;\n  font-size: 10px;\n  font-weight: 950;\n  white-space: nowrap;\n}\n.sg-stage-row.sg-active {\n  transform: translateX(5px);\n  border-color: rgba(37,99,235,.38);\n  box-shadow: 0 18px 38px rgba(15,23,42,.08);\n}\n.sg-stage-row.sg-active .sg-stage-icon {\n  color: #fff;\n  background: linear-gradient(135deg, #2563EB, #38BDF8);\n}\n.sg-stage-row.sg-active .sg-service-tag {\n  color: #0F172A;\n  background: #E0F2FE;\n}\n.sg-stage-row.sg-critical {\n  border-color: rgba(220,38,38,.28);\n}\n.sg-stage-row.sg-critical.sg-active .sg-stage-icon {\n  background: linear-gradient(135deg, #DC2626, #F97316);\n}\n.sg-stage-row.sg-critical.sg-active .sg-service-tag {\n  color: #991B1B;\n  background: #FEE2E2;\n  border-color: #FECACA;\n}\n@media (max-width: 1020px) {\n  .sg-demo-stage {\n    grid-template-columns: 1fr;\n  }\n  .sg-phone-card {\n    min-height: auto;\n  }\n}\n@media (max-width: 680px) {\n  #sg-pipeline-demo {\n    padding: 62px 18px;\n  }\n  .sg-board-top {\n    grid-template-columns: 1fr;\n  }\n  .sg-risk-badge {\n    justify-self: start;\n  }\n  .sg-stage-row {\n    grid-template-columns: 48px 1fr;\n  }\n  .sg-service-tag {\n    justify-self: start;\n    grid-column: 2;\n  }\n}\n";
+    document.head.appendChild(style);
+  }
+
+  function wireDemo() {
+    var button = document.getElementById("sg-run-demo");
+    if (!button || button.dataset.sgWired === "1") return;
+    button.dataset.sgWired = "1";
+
+    var scores = [8, 18, 41, 68, 84, 96];
+    var titles = [
+      "Monitoring call",
+      "Protected call connected",
+      "Transcript analyzed",
+      "High-risk phrase detected",
+      "Event saved",
+      "Automatic protection triggered"
+    ];
+    var copy = [
+      "SilentGuard is waiting for scam indicators in the live transcript.",
+      "The call is routed through the protected SilentGuard flow.",
+      "Live speech is converted into transcript segments for analysis.",
+      "Urgency and verification-code language push the risk score into the danger zone.",
+      "The event is stored with transcript, risk score, signals, and action.",
+      "A guardian alert is sent and the dangerous call is automatically disconnected."
+    ];
+    var badges = ["Low risk", "Low risk", "Medium risk", "High risk", "High risk", "Critical risk"];
+
+    button.addEventListener("click", function () {
+      var steps = Array.prototype.slice.call(document.querySelectorAll("[data-sg-step]"));
+      var lines = Array.prototype.slice.call(document.querySelectorAll("[data-sg-line]"));
+      var ring = document.getElementById("sg-risk-ring");
+      var value = document.getElementById("sg-risk-value");
+      var title = document.getElementById("sg-risk-title");
+      var body = document.getElementById("sg-risk-copy");
+      var badge = document.getElementById("sg-risk-badge");
+      var callState = document.getElementById("sg-call-state");
+
+      steps.forEach(function (s) { s.classList.remove("sg-active"); });
+      lines.forEach(function (l) { l.classList.remove("sg-active"); });
+      if (callState) callState.textContent = "Call active";
+      button.disabled = true;
+      button.textContent = "Running protection...";
+
+      scores.forEach(function (n, i) {
+        setTimeout(function () {
+          if (steps[i]) steps[i].classList.add("sg-active");
+          if (lines[Math.min(i, 3)]) lines[Math.min(i, 3)].classList.add("sg-active");
+          if (ring) ring.style.setProperty("--sg-score", n + "%");
+          if (value) value.textContent = String(n).padStart(2, "0");
+          if (title) title.textContent = titles[i];
+          if (body) body.textContent = copy[i];
+          if (badge) badge.textContent = badges[i];
+          if (i === scores.length - 1) {
+            if (callState) callState.textContent = "Call disconnected";
+            button.disabled = false;
+            button.textContent = "Replay protection demo";
+          }
+        }, i * 620);
+      });
+    });
+  }
+
+  function injectDemo() {
+    installStyles();
+    if (document.getElementById("sg-pipeline-demo")) {
+      wireDemo();
+      return;
+    }
+    var hero = document.querySelector(".landing-hero-wrap");
+    if (!hero) return;
+    hero.insertAdjacentHTML("afterend", demoMarkup);
+    wireDemo();
+  }
+
+  window.addEventListener("DOMContentLoaded", function () {
+    injectDemo();
+    var root = document.getElementById("root");
+    if (!root || !window.MutationObserver) return;
+    new MutationObserver(function () { injectDemo(); }).observe(root, { childList: true, subtree: true });
+  });
+})();
+
+  </script>
+</body>
+</html>
